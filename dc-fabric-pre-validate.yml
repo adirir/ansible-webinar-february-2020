@@ -6,8 +6,8 @@
     - batfish.base
 
   vars:
-    snapshot: dc1-target
-    network: DC1
+    snapshot: snapshot0
+    network: arista
   tasks:
 
     - name: Pre Deployment fabric validation

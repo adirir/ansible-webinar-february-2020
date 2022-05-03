@@ -1,76 +1,76 @@
+---
 all:
   children:
-    AVD_LAB:
+    CVP:
+      hosts:
+        # cv_ztp:
+        #   ansible_host: 192.168.20.5
+        #   ansible_user: root
+        #   ansible_password: ansible
+        cv_server:
+          ansible_httpapi_host: 192.168.20.46
+          ansible_host: 192.168.20.46
+          ansible_user: cvpadmin
+          ansible_password: H0n3yb@dg3r
+          ansible_connection: httpapi
+          ansible_httpapi_use_ssl: true
+          ansible_httpapi_validate_certs: false
+          ansible_network_os: eos
+          ansible_httpapi_port: 443
+          # Configuration to get Virtual Env information
+          ansible_python_interpreter: $(which python3)
+    # DC1_Fabric - EVPN Fabric running in home lab
+    ASU:
       children:
-        CVP:
-          hosts:
-            AVD-CVP-1:
-# DC1 Fabric
-        DC1_FABRIC:
+        PolyTech:
           children:
-            DC1_SPINES:
-              hosts:
-                DC1-SPINE1:
-                  ansible_host: 192.168.200.101
-                DC1-SPINE2:
-                  ansible_host: 192.168.200.102
-                DC1-SPINE3:
-                  ansible_host: 192.168.200.103
-                DC1-SPINE4:
-                  ansible_host: 192.168.200.104
-            DC1_LEAFS:
+            PolyTech_SPINES:
+              vars:
+                type: spine
+              hosts:       
+                PolyTech-SPINE1:
+                  ansible_host: 192.168.20.60
+                PolyTech-SPINE2:
+                  ansible_host: 192.168.20.61
+            PolyTech_L3LEAFS:
+              vars:
+                type: l3leaf
               children:
-                DC1_LEAF1:
+                PolyTech_LEAFA:
                   hosts:
-                    DC1-LEAF1A:
-                      ansible_host: 192.168.200.105
-                DC1_LEAF2:
-                  hosts:
-                    DC1-LEAF2A:
-                      ansible_host: 192.168.200.106
-                    DC1-LEAF2B:
-                      ansible_host: 192.168.200.107
-                DC1_SVC3:
-                  hosts:
-                    DC1-SVC3A:
-                      ansible_host: 192.168.200.108
-                    DC1-SVC3B:
-                      ansible_host: 192.168.200.109
-                DC1_BL1:
-                  hosts:
-                    DC1-BL1A:
-                      ansible_host: 192.168.200.110
-                    DC1-BL1B:
-                      ansible_host: 192.168.200.111
-            DC1_L2LEAFS:
+                    PolyTech-LEAF1:
+                      ansible_host: 192.168.20.62
+                    PolyTech-LEAF2:
+                      ansible_host: 192.168.20.63
+            PolyTech_L2LEAFS:
+              vars:
+                type: l2leaf
               children:
-                DC1_L2LEAF1:
+                PolyTech_L2LEAF1:
                   hosts:
-                    DC1-L2LEAF1A:
-                      ansible_host: 192.168.200.112
-                DC1_L2LEAF2:
-                  hosts:
-                    DC1-L2LEAF2A:
-                      ansible_host: 192.168.200.113
-                    DC1-L2LEAF2B:
-                      ansible_host: 192.168.200.114
+                    # PolyTech-L2LEAF1A:
+                    #   ansible_host: 192.168.20.64
+                    PolyTech-L2LEAF1B:
+                      ansible_host: 192.168.20.65
+            #         PolyTech-L2LEAF1c:
+            #           ansible_host: 192.168.20.66
+            #         PolyTech-LEAF2:
+            #           ansible_host: 192.168.20.63
           vars:
             ansible_connection: httpapi
             ansible_network_os: eos
-            ansible_user: admin
-            # should use vault for passwords - leaving un-encrypted for ease of sharing for labs
-            ansible_ssh_pass: arista123
-            ansible_become: yes
+            ansible_user: cvpadmin
+            # should use vault for passwords
+            ansible_ssh_pass: H0n3yb@dg3r
+            ansible_become: true
             ansible_become_method: enable
-            ansible_httpapi_use_ssl: true
+            ansible_httpapi_use_ssl: false
             ansible_httpapi_validate_certs: false
-
-        DC1_TENANTS_NETWORKS:
-          children:
-            DC1_LEAFS:
-            DC1_L2LEAFS:
-
-        DC1_SERVERS:
-          children:
-            DC1_LEAFS:
-            DC1_L2LEAFS:
+    PolyTech_TENANTS_NETWORKS:
+      children:
+        PolyTech_L3LEAFS:
+        PolyTech_L2LEAFS:
+    # PolyTech_SERVERS:
+    #   children:
+    #     PolyTech_L3LEAFS:
+    #     PolyTech_L2LEAFS:

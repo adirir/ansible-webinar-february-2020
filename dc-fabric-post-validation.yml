@@ -1,6 +1,6 @@
 ---
 
-- hosts: DC1_FABRIC
+- hosts: PolyTech
 
   tasks:
 

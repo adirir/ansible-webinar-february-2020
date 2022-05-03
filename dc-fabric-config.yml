@@ -1,10 +1,10 @@
-- hosts: DC1_FABRIC
+- hosts: PolyTech
 
   tasks:
 
     - name: generate intented variables
       import_role:
-         name: arista.avd.eos_l3ls_evpn
+         name: arista.avd.eos_designs
 
     - name: generate device intended config and documention
       import_role:
